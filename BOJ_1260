@@ -11,7 +11,7 @@ void push(int v1)
 {
 	stack[top++] = v1;
 	if(top == 1000)
-		top = 0;
+        	printf("stack over\n");
 }
 
 void pop()
