@@ -4,8 +4,8 @@
 
 int map[1001][1001] = {0};
 int N, M, startv;
-int top=0, stack[1000] = {0}, visit[1001]= {0}; //for DFS
-int head=0,tail=0, queue[1001] = {0}; // for BFS
+int top=0, stack[1000] = {0}, visit[1001]= {0}; 
+int head=0,tail=0, queue[1001] = {0}; 
 
 void push(int v1)
 {
