@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	vector<int> v;
+	// 비어있는 vector v 생성
+	
+	vector<int> v1(10);
+	// 0으로초기화 된 10칸짜리 vector v 생성
+	
+	vector<int> v2(10,-10);
+	// -10로 초기화 된 10칸 짜리 vector v 생성
+	
+	vector<int> v3(v1);
+	// v1을 복사해서 v2 생성
+	
+	v.assign(8,3);
+	// 3의 갑으로 8개 원소 할당:
+	// idx 값 참조 / at은 범위를 검사하지만 느림->범위 밖이면 std::error를 출력함
+	
+	cout << v.front() << endl;
+	cout << v.back() << endl;
+	v.clear();
+	// 원소만 제거하고 메모리는 남아있음
+	
+	v.pop_back(); // 뒤에 원소 제거
+	
+	v.push_back(100); // 뒤에 100 넣기
+	
+	v.begin(); // 시작 iterator 반환
+	v.end(); // 끝 iterator 반환
+
+
+	v.insert(v.begin(), 100); // 벡터 중간에 원소 추가
+
+	v.erase(v.begin()); // 벡터 중간에 원소 제거
+	// 첫 번째 인자로 iterator가 들어가야 함
+	
+	v.size(); // v에 할당된 원소의 개수
+	
+	v.capacity(); // v에 할당된 메모리 크기
+
+	v.resize(100); // v가 100개의 원소를 포함하도록 크기를 변경
+
+	v.reserve(100); // v에 할당된 메모리 크기를 100으로 조정
+
+	v.empty();
+
+		
+}
+
+
+
