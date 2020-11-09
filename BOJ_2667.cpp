@@ -40,7 +40,7 @@ int main()
 	}
 	printf("%d\n", group_num);
 	qsort(sorted_arr, ans_num, 4, compare);
-	for(int i=0;i<ans_num;i++)
+	for(int i=0; i<ans_num; i++)
 		printf("%d\n", sorted_arr[i]);
 }
 
