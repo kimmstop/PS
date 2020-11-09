@@ -50,7 +50,7 @@ int main()
 	int Map[500][500] = { 0 };
 	scanf(" %d\n%d", &n, &m);
 	int f1,f2;
-	for(int i =0; i < m; i++){
+	for(int i = 0; i < m; i++){
 		scanf(" %d %d", &f1, &f2);
 		Map[f1-1][f2-1] = 1;
 		Map[f2-1][f1-1] = 1;
