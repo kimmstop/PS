@@ -44,7 +44,7 @@ int main()
 		}
 	}
 	cout << area << endl;
-	for(int i =0;i<area;i++){
+	for(int i =0; i<area; i++){
 		cout << pq.top()<< " ";
 		pq.pop();
 	}
