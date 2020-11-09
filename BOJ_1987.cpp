@@ -51,7 +51,7 @@ void DFS(int x, int y, int* ans)
 {
 	if(*ans == 26)
 		return;
-	visit[alptoidx(x,y)] = 1;
+	visit[alptoidx(x, y)] = 1;
 	int dx[4] = {0, -1, 0 , 1}, dy[4]= {1, 0, -1, 0}; /* map에서 다음 x, y를 조사하기 위해 필요한 방향 값 */
 	int newx, newy, popx, popy;
 	while(!s.empty()){
