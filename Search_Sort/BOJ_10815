@@ -8,13 +8,12 @@ int N, M;
 int main()
 {
 	scanf("%d", &N);
-	int card[N];
+	int card[N], req[N];
 	for(int i = 0; i < N; i++){
 		scanf(" %d", &card[i]);
 	}
 	sort(card, card + N);
 	scanf(" %d", &M);
-	int req[M];
 	for(int i = 0; i < M; i++){
 		scanf(" %d", &req[i]);
 	}

@@ -33,7 +33,6 @@ void Nodedel(Node orgarr[], int delnode)
 	
 	for(int i = 0; i  < N; i++){
 		if(orgarr[i].parent == delnode){
-			//printf("%d번 노드 큐 넣기\n",i);
 			insert(i);
 		}
 	}
