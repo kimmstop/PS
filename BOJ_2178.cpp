@@ -9,7 +9,7 @@ int queue[10000] = { 0 };
 void insert(int loc)
 {
 	queue[tail++] = loc;
-	if(tail==9999)
+	if(tail == 9999)
 		tail = 0;
 }
 
