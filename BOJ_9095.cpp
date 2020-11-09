@@ -9,7 +9,7 @@ int main()
 	arr[2] = 2;
 	arr[3] = 4;
 	for(int i = 4; i < 11; i++)
-		arr[i] = arr[i-1] + arr[i-2] + arr[i-3];
+		arr[i] = arr[i - 1] + arr[i - 2] + arr[i - 3];
 	scanf(" %d", &T);
 	for(int i = 0; i < T; i++){
 		int num;
