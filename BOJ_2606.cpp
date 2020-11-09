@@ -50,7 +50,6 @@ int delete()
 
 void affect(int v)
 {
-	//printf("@%d\n", v);
 	for(int i = 1; i <= numofv; i++){
 		if(map[v][i] == 1 && visit[i] == 0){
 			insert(i);
