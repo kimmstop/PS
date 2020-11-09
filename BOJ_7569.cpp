@@ -5,7 +5,7 @@ using namespace std;
 
 int M, N, H; // 가로, 세로, 높이
 int numofyet=0, numofcomp=0, numofempty=0, ans=0;
-int map[1000000] = {0};
+int map[1000000] = { 0 };
 queue<int> q;
 
 int loctoline(int x, int y, int z);
