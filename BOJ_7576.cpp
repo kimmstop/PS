@@ -15,7 +15,7 @@ int main()
 	int ans=0;
  	scanf("%d %d", &M, &N);
 	for(int i =0;i < N; i++){
-		for(int j=0; j< M; j++){
+		for(int j = 0; j< M; j++){
 			scanf(" %d", &map[i][j]);
 			if(map[i][j] == -1)
 				numofempty++;
