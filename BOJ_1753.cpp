@@ -50,7 +50,7 @@ int main()
 			}
 		}
 	}
-		for(int i = 1; i<=V;i++){
+		for(int i = 1; i <= V;i++){
 		if(dijarr[i] == M){
 			cout << "INF\n";
 		}
