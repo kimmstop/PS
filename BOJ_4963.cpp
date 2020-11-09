@@ -46,11 +46,11 @@ void find(Map map[][50], int x, int y)
 		insert(x+1,y);
 	}
 	if(y - 1 >= 0 && map[x][y - 1].visit == 0 && map[x][y - 1].val == 1){
-		map[x][y-1].visit = 1;//왼
+		map[x][y-1].visit = 1;
 		insert(x,y-1);
 	}
 	if(x - 1 >= 0 && y + 1 < w && map[x - 1][y + 1].visit == 0 && map[x - 1][y + 1].val == 1){
-		map[x-1][y+1].visit = 1;//오위
+		map[x-1][y+1].visit = 1;
 		insert(x-1,y+1);
 	}
 	if(x + 1 < h && y + 1 < w && map[x + 1][y + 1].visit == 0 && map[x + 1][y + 1].val == 1){
@@ -115,7 +115,6 @@ int main()
 				}
 			}
 		}
-       // printf("\n");
 		printf("%d\n",landcnt);
 		landcnt = 0;
 		head=0,tail=0;
