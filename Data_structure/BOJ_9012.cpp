@@ -26,7 +26,7 @@ int main()
 				else
 					s.push(')');
 			}
-			else if(c =='\n'){
+			else if(c == '\n'){
 				if(s.empty()){
 					printf("YES\n");
 					break;
