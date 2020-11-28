@@ -35,19 +35,13 @@ void check_sum(int* sum, int idx)
 	if(*sum == S){
 		ans++;
 	}
-	if(idx == N -1){
-			*sum -= subset.back();
-			subset.pop_back();
+	for(int i = idx + 1; i < N; i++){
+			*sum += set[i];
+			subset.push_back(set[i]);
+			check_sum(sum, i);
 		}
-		else{
-			for(int i = idx + 1; i < N; i++){
-				*sum += set[i];
-				subset.push_back(set[i]);
-				check_sum(sum, i);
-			}
-			*sum -= subset.back();
-			subset.pop_back();
-		}
+		*sum -= subset.back();
+		subset.pop_back();
 }
 
 /*6603번 "로또"와 상당히 비슷하다. 코드는 거의 똑같다.
