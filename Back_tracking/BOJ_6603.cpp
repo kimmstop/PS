@@ -41,17 +41,11 @@ void setnext(int idx)
 		return;
 	}
 	else{
-		if(idx == k-1){
-			ans.pop_back();
-			return;
+		for(int i = idx + 1; i < k; i++){
+			ans.push_back(v1[i]);
+			setnext(i);
 		}
-		else{
-			for(int i = idx + 1; i < k; i++){
-				ans.push_back(v1[i]);
-				setnext(i);
-			}
-			ans.pop_back();
-		}
+		ans.pop_back();
 	}
 }
 
@@ -65,4 +59,6 @@ void setnext(int idx)
  * 정답 배열을 함수인자로 전달하니 call by value 처럼 작동되어
  * 위에서 pop을 하고 return할 경우 pop이 안되었다.
  * 전역으로 선언한 뒤에 테스트 케이스가 끝날 때 마다
- * clear를 해주었다. */
+ * clear를 해주었다.
+ * idx 가 k-1과 같은지 검사해서 pop하는 조건은 굳이 따로 안빼도 된다
+ * for문이 끝나는 조건과 동일하다  */
