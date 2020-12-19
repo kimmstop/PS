@@ -11,13 +11,12 @@ int total_member[20], first_team_member[10], second_team_member[10];
 int first_team_member_idx, second_team_member_idx;
 int ability[20][20];
 int first_team_ability, second_team_ability, min_differ_of_ability = ENOUGH_LARGE_NUM;
-int pair_for_get_ability[2], pair_idx;
+int pair_in_first_team[2], pair_in_second_team[2], pair_idx;
 
 void Make_team();
 void Set_first_team_and_fill_second_team(int member_to_insert);
 void Get_team_ability_and_cal_diff_of_ability();
-void Get_first_team_ability(int member_to_pair);
-void Get_second_team_ability(int member_to_pair);
+void Get_Each_team_ability(int member_to_pair);
 void Fill_second_team();
 bool Isremain_member(int member);
 void Calculate_diff_of_ability();
@@ -72,39 +71,27 @@ void Fill_second_team()
 
 void Get_team_ability_and_cal_diff_of_ability()
 {
-	Get_first_team_ability(0);
-	pair_idx = 0;
-	Get_second_team_ability(0);
+	Get_Each_team_ability(0);
 	pair_idx = 0;
 	Calculate_diff_of_ability();
 }
 
-void Get_first_team_ability(int member_to_pair)
+void Get_Each_team_ability(int member_to_pair)
 {
 	if(pair_idx == 2){
-		first_team_ability += ability[pair_for_get_ability[0]][pair_for_get_ability[1]];
-		first_team_ability += ability[pair_for_get_ability[1]][pair_for_get_ability[0]];
+		first_team_ability += ability[pair_in_first_team[0]][pair_in_first_team[1]];
+		first_team_ability += ability[pair_in_first_team[1]][pair_in_first_team[0]];
+		second_team_ability += ability[pair_in_second_team[0]][pair_in_second_team[1]];
+		second_team_ability += ability[pair_in_second_team[1]][pair_in_second_team[0]];
 		pair_idx--;
 		return;
 	}
 	for(int member = member_to_pair; member < num_of_member_in_team; member++){
-		pair_for_get_ability[pair_idx++] = first_team_member[member];
-		Get_first_team_ability(member + 1);
-	}
-	pair_idx--;
-}
-
-void Get_second_team_ability(int member_to_pair)
-{
-	if(pair_idx == 2){
-		second_team_ability += ability[pair_for_get_ability[0]][pair_for_get_ability[1]];
-		second_team_ability += ability[pair_for_get_ability[1]][pair_for_get_ability[0]];
-		pair_idx--;
-		return;
-	}
-	for(int member = member_to_pair; member < num_of_member_in_team; member++){
-		pair_for_get_ability[pair_idx++] = second_team_member[member];
-		Get_second_team_ability(member + 1);
+		pair_in_first_team[pair_idx] = first_team_member[member];
+		pair_in_second_team[pair_idx] = second_team_member[member];
+		pair_idx++;
+		Get_Each_team_ability(member + 1);
+		
 	}
 	pair_idx--;
 }
