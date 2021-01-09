@@ -37,7 +37,6 @@ int main()
 		}
 		memset(visit,0,40000);
 		memset(queue,0,40000);
-		//printf("@@%d  %d\n", ans, i);
 		if(maxans < ans)
 		maxans = ans;
 		ans=0;
