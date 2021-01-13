@@ -1,92 +1,142 @@
-#include <stdio.h>
-#include <string.h>
+#include <iostream>
+#include <stack>
+#include <algorithm>
 
+using namespace std;
 
-int T, M, N, K, map[50][50] = { 0 }; // 가로 세로 배추 위치 개수 == 배추개수
-int visit[2500] = { 0 }, queue[2500] = { 0 }, head = 0, tail = 0;
+int testcase_num, field_garo_len, field_sero_len, total_cabbage_num;
+int whiteworm_num;
+int field[50][50], visit[50][50];
 
+stack <int> whiteworm_loc;
 
-void insert(int v);
-int delete();
-void affect(int v);
+int Grid_to_line(int garo, int sero);
+void Line_to_Grid(int line_pos, int *garo, int *sero);
+void Place_whiteworm(int line_pos);
+void Search_adj_loc(int line_pos);
+bool Pos_in_range(int pos_garo, int pos_sero);
+bool Thereis_cabbage(int line_pos);
 
 int main()
 {
-	int x, y, ans = 0;
-	scanf("%d", &T);
-	while(T > 0){
-		scanf(" %d %d %d", &M, &N, &K);
-		
-		for(int i = 0; i < K; i++){
-			scanf(" %d %d", &x, &y);
-			map[y][x] = 1;
+	cin >> testcase_num;
+	for(int t = 0; t < testcase_num; t++){
+		cin >> field_garo_len >> field_sero_len >> total_cabbage_num;
+	
+		int cabbage_loc_garo, cabbage_loc_sero;
+		for(int i = 0; i < total_cabbage_num; i++){
+			cin >> cabbage_loc_garo >> cabbage_loc_sero;
+			field[cabbage_loc_sero][cabbage_loc_garo] = 1;
 		}
 	
-		for(int i = 0; i < N; i++){
-			for(int j = 0; j < M; j++){
-				if(map[i][j] == 1 && visit[i * M + j] == 0){
-					insert(i * M + j);
-					visit[i * M + j] = 1;
-					affect(i * M + j);
-					ans++;
-					//printf("ans:%d\n", ans);
+		for(int i = 0; i < field_sero_len; i++){
+			for(int j = 0; j < field_garo_len; j++){
+				if(field[i][j] == 1 && visit[i][j] == 0){
+					Place_whiteworm(Grid_to_line(j, i));
 				}
 			}
 		}
-		printf("%d\n", ans);
-		ans = 0;
-    for(int i= 0; i< N; i++){
-      memset(map[i],0,4 * 50);
-    }
-		memset(visit,0,4*2500);
-    memset(queue,0,4*2500);
-		head =0;
-		tail=0;
-		T--;
-	}
-}
-
-
-void insert(int v)
-{
-	queue[tail++] = v;
-}
-
-int delete()
-{
-	if(head == tail)
-		return -1;
-	int ret = queue[head++];
-	return ret;
-}
-
-void affect(int v)
-{
-	int garo = v % M, sero = v / M;
 	
-	//위 오 아 왼
-	if(sero - 1 >= 0 && map[sero - 1][garo] == 1 && visit[v - M] == 0){
-		insert(v - M);
-		visit[v - M] = 1;
+		
+		for(int i = 0; i < field_sero_len; i++){
+			fill(visit[i], visit[i] + field_garo_len, 0);
+			fill(field[i], field[i] + field_garo_len, 0);
+		}
+		
+		cout << whiteworm_num << endl;
+		whiteworm_num = 0;
 	}
-	if(garo + 1 <= M- 1 && map[sero][garo + 1] == 1 && visit[v+1] == 0){
-		insert(v +1);
-		visit[v +1] = 1;
-	}
-	if(sero + 1 <= N-1 && map[sero + 1][garo] == 1 && visit[v + M] == 0){
-		insert(v + M);
-		visit[v + M] = 1;
-	}
-	if(garo - 1 >= 0 && map[sero][garo - 1] == 1 && visit[v - 1] == 0){
-		insert(v - 1);
-		visit[v - 1] = 1;
-	}
-	int newv = delete();
-	if(newv == -1){
+}
+
+int Grid_to_line(int garo, int sero)
+{
+	return sero * field_garo_len + garo;
+}
+
+void Line_to_Grid(int line_pos, int *garo, int *sero)
+{
+	*sero = line_pos / field_garo_len;
+	*garo = line_pos % field_garo_len;
+}
+
+void Place_whiteworm(int line_pos)
+{
+	int whiteworm_sero, whiteworm_garo;
+	int *whiteworm_sero_p = &whiteworm_sero, *whiteworm_garo_p = &whiteworm_garo;
+	Line_to_Grid(line_pos, whiteworm_garo_p, whiteworm_sero_p);
+	
+	visit[whiteworm_sero][whiteworm_garo] = 1;
+	whiteworm_num++;
+	whiteworm_loc.push(line_pos);
+	
+	Search_adj_loc(line_pos);
+}
+
+void Search_adj_loc(int line_pos)
+{
+	if(whiteworm_loc.empty())
 		return;
+	
+	int dir_sero[4] = {-1, 0, 1, 0}, dir_garo[4] = {0, 1, 0, -1};
+	
+	int cur_sero, cur_garo;
+	int *cur_sero_p = &cur_sero, *cur_garo_p = &cur_garo;
+	Line_to_Grid(line_pos, cur_garo_p, cur_sero_p);
+	
+	int adj_sero, adj_garo;
+	for(int i = 0; i < 4; i++){
+		adj_sero = cur_sero + dir_sero[i];
+		adj_garo = cur_garo + dir_garo[i];
+		if(Pos_in_range(adj_garo, adj_sero)){
+			line_pos = Grid_to_line(adj_garo, adj_sero);
+		}
+		else
+			continue;
+		
+		
+		if(Thereis_cabbage(line_pos)&& visit[adj_sero][adj_garo] == 0){
+			whiteworm_loc.push(line_pos);
+			visit[adj_sero][adj_garo] = 1;
+			Search_adj_loc(line_pos);
+		}
 	}
-	affect(newv);
+	
+	whiteworm_loc.pop();
 	
 }
 
+bool Pos_in_range(int pos_garo, int pos_sero)
+{
+	if(pos_garo >=0 && pos_garo < field_garo_len && pos_sero >=0 && pos_sero < field_sero_len){
+		return true;
+	}
+	
+	return false;
+}
 
+
+
+bool Thereis_cabbage(int line_pos)
+{
+	int pos_sero, pos_garo;
+	int *pos_sero_p = &pos_sero, *pos_garo_p = &pos_garo;
+	Line_to_Grid(line_pos, pos_garo_p, pos_sero_p);
+	
+	
+	if(field[pos_sero][pos_garo] == 1)
+		return true;
+	
+	return false;
+}
+
+
+/*2021-01-13
+Refactoring
+옛날에 처음 문제를 풀었을 때 문제에서 주어진 가로, 세로와
+직접 구현한 배열의 x, y를 혼동하여 애를 먹었다. 
+이름이 조금 길어졌지만 의미있는 이름을 사용하니
+구현이 더 편해졌다.
+2차원배열의 인덱스와 1차원 배열의 인덱스를 서로 변환 해주는 걸 만들었는데
+인접한 위치를 확인하는 과정에서 인접한 위치가 배열의 범위 안에 있는지 먼저
+확인을 한 후에 배추가 있는지, 방문을 했는지 확인해야한다. 
+*/
