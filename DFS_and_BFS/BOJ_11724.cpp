@@ -1,47 +1,64 @@
-#include <stdio.h>
+#include <iostream>
+#include <list>
 
-int N,M, map[1001][1001]= {0}, visit[1001] = {0};
+#define ZERO 0;
 
-int stack[1001] = { 0 }, top = 0;
+using namespace std;
 
-void push(int vertex);
-void DFS(int startv);
+int num_of_v, num_of_e;
+int num_of_connected_component;
+int visit[1001];
+list <int> adj_list[1001];
 
+void Count_connected_component();
+void Is_there_connected_componet(int v);
 
 int main()
 {
-	scanf("%d %d", &N, &M);
-	int u,v, ans=0;
-	for(int i = 1; i <=  M; i++){
-		scanf(" %d %d", &u, &v);
-		map[u][v] = 1;
-		map[v][u] = 1;
+	int v1, v2;
+	cin >> num_of_v >> num_of_e;
+	for(int i = 0; i < num_of_e; i++){
+		cin >> v1 >> v2;
+		adj_list[v1].push_back(v2);
+		adj_list[v2].push_back(v1);
 	}
-	for(int i = 1; i <= N; i++){
-		for(int j = 1; j <= N; j++){
-			if(visit[i] == 0){
-				DFS(i);
-				ans++;
-				top = 0;
-			}
-		}
-	}
-	printf("%d", ans);
+	
+	Count_connected_component();
+	cout << num_of_connected_component << endl;
 }
 
-void push(int vertex)
-{
-	stack[top++] = vertex;
-}
 
-void DFS(int startv)
+void Count_connected_component()
 {
-	push(startv);
-	visit[startv] = 1;
-	for(int i = 1; i <= N; i++){
-		if(map[startv][i] == 1 && visit[i] == 0){
-			DFS(i);
+	for(int v = 1; v <= num_of_v; v++){
+		if(adj_list[v].size() >= 0 && visit[v] == 0){
+			Is_there_connected_componet(v);
+			num_of_connected_component++;
 		}
 	}
-		
 }
+
+
+void Is_there_connected_componet(int v)
+{
+	int next_v;
+	list<int>::iterator iter;
+	for(iter = adj_list[v].begin(); iter != adj_list[v].end(); iter++){
+		next_v = *iter;
+		if(visit[next_v] == 0){
+			visit[next_v] = 1;
+			Is_there_connected_componet(next_v);
+		}
+	}
+
+}
+
+/*2020-01-16
+Refactoring
+문제를 정확히 읽고 똑바로 이해하자
+간선이 없는 독립적인 1개의 vertex도 1개의 연결요소로 봐야했다.
+문제의 조건을 잘보자
+vertex의 최대 개수는 1000개이지만 넘버링이 1부터이다.
+따라서 visit이나 adj_list배열을 [1000]으로 할 경우
+out of bound 에러가 나온다.
+*/
