@@ -1,93 +1,72 @@
-#include <stdio.h>
+#include <iostream>
+#include <cmath>
 
-int N, map[100][100]={0}, ansmap[100][100] = { 0 };
-int stack[1000] = { 0 }, visit[100] = {0}, top = 0;
+#define INF 987654321
 
-void push(int v);
-int pop();
-void DFS(int startv);
-void addpath(int newv);
-void addcircle(int newv);
+using namespace std;
+
+int vertex_num;
+int map[100][100];
+int path[100][100];
+
+void Floyd();
+void Print_path();
+
 
 int main()
-{	
-	scanf("%d", &N);
-	for(int i = 0; i< N; i++){
-		for(int j = 0; j< N;j++){
-			scanf(" %d", &map[i][j]);
-		}
-	}
-	for(int i = 0;i < N; i++){
-			push(i);
-			visit[i] = 1;
-			DFS(i);
-			top = 0;
-			memset(stack,0,4000);
-			memset(visit,0,400);
-	}
-	for(int i = 0;i<N;i++){
-		for(int j =0;j<N;j++){
-			printf("%d ", ansmap[i][j]);
-		}
-		printf("\n");
-	}
-}
-
-
-void push(int v)
 {
-	stack[top++] = v;
-}
-
-int pop()
-{
-	int ret = stack[--top];
-	return ret;
-}
-
-int isinstack(int newv)
-{
-	for(int i = 0;i<top;i++){
-		if(newv == stack[i])
-			return 1;
-	}
-	return 0;
-}
-
-
-void DFS(int startv)
-{
-	int curv = startv;
-	for(int i = 0;i < N; i++){
-		if(map[curv][i] == 1){
-			if(visit[i] == 1){
-				if(isinstack(i)){
-					ansmap[i][i] = 1;
-				}
-        			continue;     
+	cin >> vertex_num;
+	int edge;
+	for(int i = 0; i < vertex_num; i++){
+		for(int j = 0; j < vertex_num; j++){
+			cin >> edge;
+			if(edge == 1){
+				map[i][j] = 1;
 			}
 			else{
-				addpath(i);
+				map[i][j] = INF;
 			}
-			push(i);
-			visit[i] = 1;
-			DFS(i);
-			pop();
-			
 		}
-		
 	}
+	
+	Floyd();
+	
+	Print_path();
 }
 
-void addpath(int newv)
+void Floyd()
 {
-	for(int i = 0; i< top; i++){
-		ansmap[stack[i]][newv]=1;
+	for(int inter_v = 0; inter_v < vertex_num; inter_v++){
+		for(int start_v = 0; start_v < vertex_num; start_v++){
+			for(int end_v = 0; end_v < vertex_num; end_v++){
+				map[start_v][end_v] = min( map[start_v][end_v], map[start_v][inter_v] + map[inter_v][end_v]);
+				if(map[start_v][end_v] < INF){
+					path[start_v][end_v] = 1;
+				}
+			}
+		}
 	}
 }
 
+void Print_path()
+{
+	for(int i = 0; i <vertex_num; i++){
+		for(int j = 0; j < vertex_num; j++){
+			cout << path[i][j] << " ";
+		}
+		cout << "\n";
+	}
+}
 
-
-
-
-
+/*2020-01-23
+Refactoring
+정석?으로 풀자면 DFS도는 BFS를 사용하여 탐색을 하면서 새로 탐색되는 vertex와 지금까지
+거쳐온 vertex 모두를 경로가 있다고 표시하는 것이다. 
+하지만 두 지점의 최단 경로를 구하는 Floyd알고리즘으로 이 문제를 풀 수 있다. 
+내가 구현한 Floyd알고리즘은 DP방식을 사용하여 start_v -> end_v 로 가는 경로중
+inter_v를 포함하는 경우와 그렇지 않은 경우를 고려하여 그 두가지 경우 중 짧은 경로를 map에 반영하는 것이다.
+이때 반복문으로 inter_v가 0부터 문제에서 주어진 vertex_num까지의 상황을 모두 고려한다. 
+두 vertex 사이에 경로가 없는 경우에는 매우 큰 수 (여기서는 INF)로 두었다. 
+문제의 목적은 i 에서 j로 가는 경로가 있는지 여부에 대한 정보를 출력하는 것이다. 
+따라서 map[start_v][end_v]의 값이 INF가 아닐 경우(보다 작을 경우)에 path[start_v][end_v]값을 1로 해주었다. 
+*/
