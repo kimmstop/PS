@@ -60,7 +60,7 @@ void Print_path()
 
 /*2020-01-23
 Refactoring
-정석?으로 풀자면 DFS도는 BFS를 사용하여 탐색을 하면서 새로 탐색되는 vertex와 지금까지
+정석으로 풀자면 DFS도는 BFS를 사용하여 탐색을 하면서 새로 탐색되는 vertex와 지금까지
 거쳐온 vertex 모두를 경로가 있다고 표시하는 것이다. 
 하지만 모든 vertex사이의 최단 경로를 구하는 Floyd알고리즘으로 이 문제를 풀 수 있다. 
 내가 구현한 Floyd알고리즘은 DP방식을 사용하여 start_v -> end_v 로 가는 경로중
