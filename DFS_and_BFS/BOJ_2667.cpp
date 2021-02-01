@@ -1,92 +1,124 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdio>
+#include <queue>
 
-int N, top=0, stack[1000]={ 0 }, visit[1000]={ 0 };
-int sorted_arr[1000] = { 0 }, ans_num = 0;
 
-char map[26][26];
 
-int find(int index);
-void push(int index);
-void pop();
-void DFS(int startidx, int* num_of_apt);
+using namespace std;
 
-void add_arr(int ans);
+int square_len, num_of_total_apt_complex = 0;
+int map[26][26];
 
-int compare(const void* a, const void* b);
+queue< pair<int, int> > q;
+priority_queue< int, vector<int>, greater<int> > num_of_apt_in_complex;
+
+
+void Init_map();
+void Search_map();
+bool Not_visited(int column, int row);
+void Add_num_of_total_apt_complex();
+int Cal_num_of_apt_in_complex(int column, int row, int num_of_apt);
+bool In_range(int column, int row);
+void Print_ans();
 
 int main()
 {
-	int apt_num = 0, group_num = 0;
-	int * apt_num_p;
-	apt_num_p = &apt_num;
-	scanf("%d", &N);
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < N; j++){
-			map[i][j] = getchar();
-			if(map[i][j] == '\n')
-				j--;
+	cin >> square_len;
+	
+	Init_map();
+	
+	Search_map();
+	
+	Print_ans();
+}
+
+void Init_map()
+{
+	for(int i = 0; i < square_len; i++){
+		for(int j = 0; j < square_len; j++){
+			scanf(" %1d", &map[i][j]);
 		}
 	}
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < N; j++){
-			if(map[i][j] == '1' && visit[i * N + j] == 0){
-				DFS(i*N+j, apt_num_p);
-				group_num++;
-				add_arr(*apt_num_p);
-				*apt_num_p = 0;
+}
+
+
+void Search_map()
+{
+	for(int i = 0; i < square_len; i++){
+		for(int j = 0; j < square_len; j++){
+			if(Not_visited(i,j)){
+				Add_num_of_total_apt_complex();
+				q.push(make_pair(i, j));
+				map[i][j] = 0;
+				num_of_apt_in_complex.push(Cal_num_of_apt_in_complex(i, j, 1));
 			}
 		}
 	}
-	printf("%d\n", group_num);
-	qsort(sorted_arr, ans_num, 4, compare);
-	for(int i=0; i<ans_num; i++)
-		printf("%d\n", sorted_arr[i]);
 }
 
-
-
-void push(int index)
+bool Not_visited(int column, int row)
 {
-	stack[top++] = index;
+	if(map[column][row] > 0)
+		return true;
+	return false;
 }
 
-void pop()
+void Add_num_of_total_apt_complex()
 {
-	top--;
+	num_of_total_apt_complex++;
 }
 
-void DFS(int startidx, int* num_of_apt)
+int Cal_num_of_apt_in_complex(int column, int row, int num_of_apt)
 {
-	push(startidx);
-	(*num_of_apt)++;
-	visit[startidx] = 1;
-	int i = startidx / N, j = startidx % N;
-	//위 오 아 왼
-	if(i - 1 >= 0 && map[i - 1][j] == '1' && visit[(i - 1) * N + j] == 0)
-		DFS((i - 1) * N + j, num_of_apt);
-	if(j + 1 <= N - 1 && map[i][j + 1] == '1' && visit[i * N + j + 1] == 0)
-		DFS(i * N + j + 1, num_of_apt);
-	if(i + 1 <= N - 1 && map[i + 1][j] == '1' && visit[(i + 1) * N + j] == 0)
-		DFS((i + 1) * N + j, num_of_apt);
-	if(j - 1 >= 0 && map[i][j - 1] == '1' && visit[i * N + j - 1] == 0)
-		DFS(i * N + j - 1, num_of_apt);
+	int dir_c[4] = {1, 0 , -1, 0}, dir_r[4] = {0, 1, 0, -1};
+	int adj_c, adj_r;
+	for(int i = 0; i < 4; i++){
+		adj_c = column + dir_c[i];
+		adj_r = row + dir_r[i];
+		if(Not_visited(adj_c, adj_r) && In_range(adj_c, adj_r)){
+			map[adj_c][adj_r] = 0;
+			num_of_apt++;
+			q.push(make_pair(adj_c, adj_r));
+		}
+	}
+	
+	q.pop();
+	
+	if(q.empty())
+		return num_of_apt;
+	
+	column = q.front().first;
+	row = q.front().second;
+	
+	return Cal_num_of_apt_in_complex(column, row, num_of_apt);
 }
 
-void add_arr(int ans)
+bool In_range(int column, int row)
 {
-	sorted_arr[ans_num++] = ans;
+	if(0<= column && column < square_len && 0 <= row && row < square_len)
+		return true;
+	return false;
 }
 
-
-int compare(const void* a, const void* b)
+void Print_ans()
 {
-	int num1 = *(int*)a;
-	int num2 = *(int*)b;
-	if(num1 < num2)
-		return -1;
-	if(num1 == num2)
-		return 0;
-	return 1;
+	printf("%d\n", num_of_total_apt_complex);
+	int size = num_of_apt_in_complex.size();
+	for(int i = 0; i < size; i++){
+		printf("%d\n", num_of_apt_in_complex.top());
+		num_of_apt_in_complex.pop();
+	}
 }
+ 
+
+/*2020-02-01
+Refactoring
+공백이 없는 입력이 주어질 때 getchar를 사용하지 않고
+scanf("%1d")를 이용하여 좀 더 간단하게 입력을 받을 수 있다.
+지금까지 풀었던 문제들과 매우매우 비슷하다. 
+단지를 탐색하고 탐색의 반환값인 단지내 집의 수를 우선순위 큐에 넣으면
+정렬된 상태를 유지할 수 있다. 
+*/
+ 
+
 
