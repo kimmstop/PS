@@ -1,62 +1,94 @@
-#include <stdio.h>
+#include <iostream>
+#include <list>
+#include <queue>
 
-int numofv, numofe, map[101][101] = { 0 };
-int queue[100000] = { 0 }, visit[101]= { 0 }, head = 0, tail = 0;
+using namespace std;
 
+int vertex_num, edge_num, num_of_infected_vertex = 0;
+int infected[101];
+list<int> network[101];
+queue<int> q;
 
-void insert(int v);
-int delete();
-void affect(int v);
-
+void Init_network();
+void Get_num_of_infected_vertex(int cur_v);
+bool Not_infected(int adj_v);
 
 int main()
 {
-	scanf("%d", &numofv);
-	scanf(" %d", &numofe);
+	cin >> vertex_num >> edge_num;
+		
+	Init_network();
+	
+	Get_num_of_infected_vertex(1);
+	
+	cout << num_of_infected_vertex;
+}
+
+void Init_network()
+{
 	int v1, v2;
-	for(int i = 0; i< numofe; i++){
-		scanf(" %d %d", &v1, &v2);
-		map[v1][v2] = 1;
-		map[v2][v1] = 1;
+	for(int i = 0; i < edge_num; i++){
+		cin >> v1 >> v2;
+		network[v1].push_back(v2);
+		network[v2].push_back(v1);
 	}
-	insert(1);
-	visit[1] = 1;
-	int newv, ans=0;
-	while(1){
-		newv = delete();
-		if(newv == -1)
-			break;
-		else if(newv != 1){
-			ans++;
-		}
-		affect(newv);
-	}
-	printf("%d", ans);
+	
+	infected[1] = 1;
+	q.push(1);
 }
 
-
-void insert(int v)
+void Get_num_of_infected_vertex(int cur_v)
 {
-	queue[tail++] = v;
-}
-
-int delete()
-{
-	if(head == tail)
-		return -1;
-	int ret = queue[head++];
-	return ret;
-}
-
-void affect(int v)
-{
-	for(int i = 1; i <= numofv; i++){
-		if(map[v][i] == 1 && visit[i] == 0){
-			insert(i);
-			visit[i] = 1;
+  list<int>::iterator iter;
+	for(iter = network[cur_v].begin(); iter != network[cur_v].end(); iter++){
+		if(Not_infected(*iter)){
+			infected[*iter] = 1;
+			num_of_infected_vertex++;
+			q.push(*iter);
 		}
 	}
+	
+	q.pop();
+	
+	if(q.empty())
+		return;
+	
+	cur_v = q.front();
+	Get_num_of_infected_vertex(cur_v);
 }
+
+bool Not_infected(int adj_v)
+{
+	if(infected[adj_v] == 0)
+		return true;
+	return false;
+}
+
+
+/*2020-02-01
+Refactoring
+그래프의 vertex와 edge정보가 주어질때 
+인접행렬로 표현할지, 인접리스트로 표현할지 매번 고민한다. 
+방향이 있고 weigth가 있는 그래프라면 인접 행렬이 편하다.
+vertex사이에 edge가 없다면 0, 있으면 그 weigth를 저장하면 된다.
+vertex가 매우 많지만 edge가 적다면 인접리스트를 사용하는게
+시간적 공간적 절약이다. 
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
