@@ -1,63 +1,94 @@
-#include <stdio.h>
+#include <iostream>
+#include <queue>
 
-int queue[10000] = { 0 };
-int visit[500] = { 0 };
-int tail = 0, head = 0;
 
-void insert(int index)
-{
-	queue[tail++] = index;
-	if(tail == 9999)
-		tail = 0;
-}
+using namespace std;
 
-int delete()
-{
-	int ret = queue[head++];
-	if(head == 9999)
-		head = 0;
-	return ret;
-}
+int num_of_sameperiod, list_len;
+int num_of_friends, num_of_friends_of_friends;
+int relation[501][501], visit[501];
+queue <int> q;
 
-int BFS(int Map[][500], int n)
-{
-	int start_idx = 0;
-	int numof1f = 0, numof2f = 0;
+
+void Init_relation();
+void Cal_num_of_friends();
+void Cal_num_of_friends_of_friends();
+bool Not_visit(int friend_class);
+bool Is_friend(int start_class, int friend_class);
 	
-		for(int i = start_idx; i < n; i++){
-			if(Map[start_idx][i] == 1 && i != start_idx){
-				insert(i);
-				numof1f++;
-				visit[i] = 1;
-			}
-		}
-		visit[0] = 1;
-		for(int i = numof1f; i > 0; i--){
-			start_idx = delete();
-			for(int j = 0; j < n; j++){
-				if(Map[start_idx][j] == 1 && visit[j] != 1 && j != start_idx){
-					numof2f++;
-                   visit[j] = 1;
-				}
-			}
-		}
-	return numof1f + numof2f;
-}
-
 int main()
 {
-	int n,m;
-	int Map[500][500] = { 0 };
-	scanf(" %d\n%d", &n, &m);
-	int f1,f2;
-	for(int i = 0; i < m; i++){
-		scanf(" %d %d", &f1, &f2);
-		Map[f1-1][f2-1] = 1;
-		Map[f2-1][f1-1] = 1;
-		Map[f1-1][f1-1] = 1;
-		Map[f2-1][f2-1] = 1;
-	}	
+	cin >> num_of_sameperiod >> list_len;
 	
-	printf("%d\n",BFS(Map, n));
-
+	Init_relation();
+	
+	q.push(1);
+	visit[1] = 1;
+	
+	Cal_num_of_friends();
+	Cal_num_of_friends_of_friends();
+	
+	cout << num_of_friends + num_of_friends_of_friends;
 }
+
+void Init_relation()
+{
+	int f1, f2;
+	for(int i = 0; i < list_len; i++){
+		cin >> f1 >> f2;
+		relation[f1][f2] = 1;
+		relation[f2][f1] = 1;	
+	}
+}
+
+void Cal_num_of_friends()
+{
+	for(int i = 2; i <= 500; i++){
+		if(Not_visit(i) && Is_friend(1, i)){
+			q.push(i);
+			visit[i] = 1;
+			num_of_friends++;
+		}
+	}	
+}
+
+void Cal_num_of_friends_of_friends()
+{
+	int first_friend = q.front();
+	for(int i = 2; i <= 500; i++){
+		if(Not_visit(i) && Is_friend(first_friend, i)){
+			visit[i] = 1;
+			num_of_friends_of_friends++;
+		}
+	}
+	
+	q.pop();
+	
+	if(q.empty())
+		return;
+	
+	Cal_num_of_friends_of_friends();
+}
+
+bool Not_visit(int friend_class)
+{
+	if(visit[friend_class] == 0)
+		return true;
+	return false;
+}
+
+bool Is_friend(int start_class, int friend_class)
+{
+	if(relation[start_class][friend_class] == 1)
+		return true;
+	return false;
+	
+}
+
+
+/*2020-02-05
+Refactoring
+친구와 친구의 친구를 구하는 방법이 비슷하지만 둘의 함수를 분리했다. 
+같이 했다면 친구의 친구를 구하고 종료되는 조건을 설정했었어야 했다.
+변수의 이름을 짓는 과정에서 "학번, 동기" 의 변수이름을 짓는 것이 힘들었다.
+*/
