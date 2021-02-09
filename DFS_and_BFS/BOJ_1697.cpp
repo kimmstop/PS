@@ -96,7 +96,7 @@ bool Next_subin_pos_in_range(int next_subin_pos[], int idx)
 }
 
 
-/*2020-01-22
+/*2021-01-22
 Refactoring
 백트랙킹 문제인지 BFS문제인지 아직 문제만 읽고 파악이 잘 되지 않는다.
 이 문제도 재귀호출 시마다 수빈의 위치와 동생의 위치를 비교하여 promising한지 안한지 검사한다는
