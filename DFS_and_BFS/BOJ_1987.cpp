@@ -5,7 +5,7 @@
 using namespace std;
 
 int rowlen, columnlen;
-int board[20[20];
+int board[20][20];
 int visited_alphabet[100];
 int max_movement_val, movement_val= 1;
 stack < pair<int, int> > s;
@@ -87,6 +87,9 @@ bool Adj_loc_alpabet_not_visited(int alphabet)
 		return true;
 	return false;
 }
+
+
+
 
 /*2021-01-30
 Refactorig
