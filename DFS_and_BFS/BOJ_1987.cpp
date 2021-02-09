@@ -5,7 +5,7 @@
 using namespace std;
 
 int rowlen, columnlen;
-int board[20[20;
+int board[20[20];
 int visited_alphabet[100];
 int max_movement_val, movement_val= 1;
 stack < pair<int, int> > s;
@@ -88,7 +88,7 @@ bool Adj_loc_alpabet_not_visited(int alphabet)
 	return false;
 }
 
-/*2020-01-30
+/*2021-01-30
 Refactorig
 알파벳의 아스키 코드를 참조해서 visited_alphabet배열을 필요한 만큼만 
 사용하려 했지만, 알파벳이 아스키 코드로 얼마인지 외우고 있지 않아서
