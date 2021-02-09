@@ -53,7 +53,7 @@ void Is_there_connected_componet(int v)
 
 }
 
-/*2020-01-16
+/*2021-01-16
 Refactoring
 문제를 정확히 읽고 똑바로 이해하자
 간선이 없는 독립적인 1개의 vertex도 1개의 연결요소로 봐야했다.
