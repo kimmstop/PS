@@ -109,7 +109,7 @@ bool Adj_loc_avail(int adj_loc_c, int adj_loc_r)
 	return false;
 }
 
-/*2020-01-31
+/*2021-01-31
 Refactoring 
 DFS를 이용하면 모든 경로에 대한 시작-도착 까지의 이동한 칸의 수를 다 구하고 그 중 최소를 구하게 되는데
 시간초과가 걸렸다. BFS를 이용해서 각 Move단계에서 인접한 loc의 movement_val을 설정해주는 방식으로 다시 구현했다.
