@@ -86,7 +86,7 @@ bool Is_friend(int start_class, int friend_class)
 }
 
 
-/*2020-02-05
+/*2021-02-05
 Refactoring
 친구와 친구의 친구를 구하는 방법이 비슷하지만 둘의 함수를 분리했다. 
 같이 했다면 친구의 친구를 구하고 종료되는 조건을 설정했었어야 했다.
