@@ -65,7 +65,7 @@ bool Not_infected(int adj_v)
 }
 
 
-/*2020-02-01
+/*2021-02-01
 Refactoring
 그래프의 vertex와 edge정보가 주어질때 
 인접행렬로 표현할지, 인접리스트로 표현할지 매번 고민한다. 
