@@ -3,7 +3,6 @@
 int cnt = 0;
 int arr[1000000]= { 0 };
 
-
 int main()
 {
 	int num;
