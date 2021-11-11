@@ -13,6 +13,5 @@ dp_list.insert(0,0)
 dp_list.insert(0,0)
 dp_list.insert(0,0)
 for i in range(3, total_num + 3):
-    t = max(dp_list[i -3] + amount[i -1] + amount[i], dp_list[i-2] + amount[i])
-    dp_list[i] = max(dp_list[i -1], t)
+    dp_list[i] = max(dp_list[i -1], dp_list[i -3] + amount[i -1] + amount[i], dp_list[i-2] + amount[i])
 print(dp_list[total_num + 2])
