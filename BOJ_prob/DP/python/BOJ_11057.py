@@ -1,4 +1,3 @@
-#*
 import sys
 lenofnum = int(sys.stdin.readline())
 dp_list = [[0 for j in range(10)] for i in range(1001)]
