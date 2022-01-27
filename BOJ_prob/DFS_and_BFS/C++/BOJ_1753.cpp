@@ -18,7 +18,7 @@ int vertex_num, edge_num, start_v;
 priority_queue <pair<int, int>, vector<pair<int, int>>, cmp> edge_len;
 list <pair<int, int>> adj_list[20001];
 int shortest_len[20001];
-
+int visit[20001];
 
 void Init_graph();
 void Cal_shortest_len();
