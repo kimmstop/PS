@@ -5,15 +5,15 @@ using namespace std;
 int N, M;
 int arr[7];
 
-void backTrack(int start_idx, int cnt);
+void backTrack(int cnt);
 
 int main()
 {
     cin >> N >> M;
-    backTrack(0, 0);
+    backTrack(0);
 }
 
-void backTrack(int start_idx, int cnt)
+void backTrack(int cnt)
 {
     if(cnt == M){
         for(int i = 0; i < M; i++){
@@ -24,6 +24,6 @@ void backTrack(int start_idx, int cnt)
     }
     for(int i = 1; i <= N; i++){
         arr[cnt] = i;
-        backTrack(i, cnt + 1);
+        backTrack(cnt + 1);
     }
 }
